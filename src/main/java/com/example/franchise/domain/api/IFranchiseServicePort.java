@@ -1,6 +1,5 @@
 package com.example.franchise.domain.api;
 
-import com.example.franchise.domain.model.Branch;
 import com.example.franchise.domain.model.Franchise;
 import reactor.core.publisher.Mono;
 

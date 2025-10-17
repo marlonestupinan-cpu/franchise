@@ -23,4 +23,9 @@ public class BranchUseCase implements IBranchServicePort {
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.FRANCHISE_NOT_FOUND, branch.getFranchise().getId().toString())))
                 .flatMap(exist -> branchPersistencePort.createBranch(branch));
     }
+
+    @Override
+    public Mono<Boolean> existBranch(Long idBranch) {
+        return branchPersistencePort.existBranch(idBranch);
+    }
 }

@@ -20,4 +20,9 @@ public class MySQLBranchAdapter implements IBranchPersistencePort {
                 .save(entityMapper.toEntity(branch))
                 .map(entityMapper::toBranch);
     }
+
+    @Override
+    public Mono<Boolean> existBranch(Long idBranch) {
+        return branchPersistencePort.existsById(idBranch);
+    }
 }
