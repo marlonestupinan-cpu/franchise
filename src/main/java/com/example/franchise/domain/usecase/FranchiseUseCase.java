@@ -14,4 +14,9 @@ public class FranchiseUseCase implements IFranchiseServicePort {
     public Mono<Franchise> addFranchise(Franchise franchise) {
         return franchisePersistencePort.createFranchise(franchise);
     }
+
+    @Override
+    public Mono<Boolean> existFranchise(Long idFranchise) {
+        return franchisePersistencePort.existFranchise(idFranchise);
+    }
 }

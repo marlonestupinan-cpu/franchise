@@ -11,3 +11,16 @@ ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_0900_ai_ci;
 
+-- Create branch table
+CREATE TABLE franchise.branch (
+	id BIGINT auto_increment NOT NULL,
+	name varchar(100) NOT NULL,
+	id_franchise BIGINT NOT NULL,
+	CONSTRAINT branch_pk PRIMARY KEY (id),
+	CONSTRAINT branch_franchise_FK FOREIGN KEY (id_franchise) REFERENCES franchise.franchise(id) ON DELETE CASCADE
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
+
+

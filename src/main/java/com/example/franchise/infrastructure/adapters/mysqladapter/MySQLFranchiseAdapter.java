@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
-public class MySQLAdapter implements IFranchisePersistencePort {
+public class MySQLFranchiseAdapter implements IFranchisePersistencePort {
     private final IFranchiseRepository franchiseRepository;
     private final IFranchiseEntityMapper entityMapper;
 
@@ -19,5 +19,10 @@ public class MySQLAdapter implements IFranchisePersistencePort {
         return franchiseRepository
                 .save(entityMapper.toEntity(franchise))
                 .map(entityMapper::toFranchise);
+    }
+
+    @Override
+    public Mono<Boolean> existFranchise(Long idFranchise) {
+        return franchiseRepository.existsById(idFranchise);
     }
 }

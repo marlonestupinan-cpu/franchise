@@ -1,5 +1,6 @@
 package com.example.franchise.infrastructure.endpoints;
 
+import com.example.franchise.infrastructure.endpoints.handler.BranchHandler;
 import com.example.franchise.infrastructure.endpoints.handler.FranchiseHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +13,11 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class RouterRest {
     @Bean
-    public RouterFunction<ServerResponse> routerFunction(FranchiseHandler franchiseHandler) {
-        return route(POST("/franchise"), franchiseHandler::addFranchise);
+    public RouterFunction<ServerResponse> routerFunction(
+            FranchiseHandler franchiseHandler,
+            BranchHandler branchHandler
+    ) {
+        return route(POST("/franchise"), franchiseHandler::addFranchise)
+                .andRoute(POST("/branch"), branchHandler::addBranch);
     }
 }
