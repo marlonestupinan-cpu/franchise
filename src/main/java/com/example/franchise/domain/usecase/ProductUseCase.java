@@ -22,4 +22,9 @@ public class ProductUseCase implements IProductServicePort {
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND, product.getBranch().getId().toString())))
                 .flatMap(exist -> productPersistencePort.createProduct(product));
     }
+
+    @Override
+    public Mono<Void> deleteProduct(Long idProduct) {
+        return productPersistencePort.deleteProduct(idProduct);
+    }
 }

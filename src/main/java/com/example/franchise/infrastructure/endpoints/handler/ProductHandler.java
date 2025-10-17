@@ -26,4 +26,13 @@ public class ProductHandler extends BaseHandler {
                         .ok().bodyValue(PRODUCT_ADDED.getMessage()))
                 .transform(errorHandler());
     }
+
+    public Mono<ServerResponse> deleteProduct(ServerRequest request) {
+        Long idProduct = Long.valueOf(request.pathVariable("id"));
+
+        return productServicePort
+                .deleteProduct(idProduct)
+                .flatMap(deleted -> ServerResponse.ok().build())
+                .transform(errorHandler());
+    }
 }
