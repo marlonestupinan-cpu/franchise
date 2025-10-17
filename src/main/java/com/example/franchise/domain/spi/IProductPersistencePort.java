@@ -5,4 +5,6 @@ import reactor.core.publisher.Mono;
 
 public interface IProductPersistencePort {
     Mono<Product> createProduct(Product product);
+
+    Mono<Void> deleteProduct(Long idProduct);
 }
