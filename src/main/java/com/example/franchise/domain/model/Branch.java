@@ -1,11 +1,10 @@
 package com.example.franchise.domain.model;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-public class Franchise {
+public class Branch {
     private Long id;
     private String name;
+    private Franchise franchise;
 }

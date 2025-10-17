@@ -22,12 +22,10 @@ import java.util.function.Function;
 import static com.example.franchise.domain.enums.TechnicalMessage.FRANCHISE_ADDED;
 
 @Component
-@Log4j2
 @RequiredArgsConstructor
-public class FranchiseHandler {
+public class FranchiseHandler extends BaseHandler {
     private final IFranchiseServicePort franchiseServicePort;
     private final IFranchiseDtoMapper franchiseDtoMapper;
-
 
     public Mono<ServerResponse> addFranchise(ServerRequest request) {
         return request
@@ -38,44 +36,5 @@ public class FranchiseHandler {
                         .ok()
                         .bodyValue(FRANCHISE_ADDED.getMessage()))
                 .transform(errorHandler());
-    }
-
-
-    private Mono<ServerResponse> buildErrorResponse(HttpStatus httpStatus, TechnicalMessage error,
-                                                    List<ErrorDTO> errors) {
-        return Mono.defer(() -> {
-            APIResponse apiErrorResponse = APIResponse
-                    .builder()
-                    .code(error.getCode())
-                    .message(error.getMessage())
-                    .date(Instant.now().toString())
-                    .errors(errors)
-                    .build();
-            return ServerResponse.status(httpStatus)
-                    .bodyValue(apiErrorResponse);
-        });
-    }
-
-    private <T> Function<Mono<ServerResponse>, Mono<ServerResponse>> errorHandler() {
-        return monoStream ->
-                monoStream
-                        .onErrorResume(BusinessException.class, ex -> buildErrorResponse(
-                                HttpStatus.BAD_REQUEST,
-                                TechnicalMessage.INVALID_PARAMETERS,
-                                List.of(ErrorDTO.builder()
-                                        .code(ex.getTechnicalMessage().getCode())
-                                        .message(ex.getMessage())
-                                        .build())))
-                        .onErrorResume(ex -> {
-                                    log.error("Unexpected error occurred for messageId: ", ex);
-                                    return buildErrorResponse(
-                                            HttpStatus.INTERNAL_SERVER_ERROR,
-                                            TechnicalMessage.INTERNAL_ERROR,
-                                            List.of(ErrorDTO.builder()
-                                                    .code(TechnicalMessage.INTERNAL_ERROR.getCode())
-                                                    .message(TechnicalMessage.INTERNAL_ERROR.getMessage())
-                                                    .build()));
-                                }
-                        );
     }
 }
