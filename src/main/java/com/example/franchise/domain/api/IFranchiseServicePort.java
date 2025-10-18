@@ -6,5 +6,5 @@ import reactor.core.publisher.Mono;
 public interface IFranchiseServicePort {
     Mono<Franchise> addFranchise(Franchise franchise);
 
-    Mono<Boolean> existFranchise(Long idFranchise);
+    Mono<Franchise> getFranchise(Long idFranchise);
 }

@@ -14,8 +14,13 @@ import org.mapstruct.ReportingPolicy;
 public interface IProductDtoMapper {
     @Mapping(source = "idBranch", target = "branch")
     Product toProduct(ProductDto productDto);
+    @Mapping(source = "branch", target = "idBranch")
+    ProductDto toDto(Product product);
 
     default Branch branchFromId(Long id) {
         return Branch.builder().id(id).build();
+    }
+    default Long getIdBranch(Branch branch) {
+        return branch.getId();
     }
 }

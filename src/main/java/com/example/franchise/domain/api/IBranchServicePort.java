@@ -5,6 +5,5 @@ import reactor.core.publisher.Mono;
 
 public interface IBranchServicePort {
     Mono<Branch> addBranch(Branch branch);
-
-    Mono<Boolean> existBranch(Long idBranch);
+    Mono<Branch> getBranch(Long idBranch);
 }

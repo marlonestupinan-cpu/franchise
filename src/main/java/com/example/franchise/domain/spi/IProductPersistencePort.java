@@ -4,7 +4,9 @@ import com.example.franchise.domain.model.Product;
 import reactor.core.publisher.Mono;
 
 public interface IProductPersistencePort {
-    Mono<Product> createProduct(Product product);
+    Mono<Product> saveProduct(Product product);
 
     Mono<Void> deleteProduct(Long idProduct);
+
+    Mono<Product> getProduct(Long idProduct);
 }

@@ -15,7 +15,7 @@ public class MySQLProductAdapter implements IProductPersistencePort {
     private final IProductEntityMapper entityMapper;
 
     @Override
-    public Mono<Product> createProduct(Product product) {
+    public Mono<Product> saveProduct(Product product) {
         return productRepository
                 .save(entityMapper.toEntity(product))
                 .map(entityMapper::toProduct);
@@ -24,5 +24,12 @@ public class MySQLProductAdapter implements IProductPersistencePort {
     @Override
     public Mono<Void> deleteProduct(Long idProduct) {
         return productRepository.deleteById(idProduct);
+    }
+
+    @Override
+    public Mono<Product> getProduct(Long idProduct) {
+        return productRepository
+                .findById(idProduct)
+                .map(entityMapper::toProduct);
     }
 }

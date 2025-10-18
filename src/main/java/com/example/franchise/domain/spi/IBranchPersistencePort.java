@@ -6,5 +6,5 @@ import reactor.core.publisher.Mono;
 public interface IBranchPersistencePort {
     Mono<Branch> createBranch(Branch branch);
 
-    Mono<Boolean> existBranch(Long idBranch);
+    Mono<Branch> getBranch(Long idBranch);
 }

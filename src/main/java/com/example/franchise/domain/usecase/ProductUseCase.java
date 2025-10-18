@@ -17,14 +17,29 @@ public class ProductUseCase implements IProductServicePort {
     @Override
     public Mono<Product> addProduct(Product product) {
         return branchServicePort
-                .existBranch(product.getBranch().getId())
-                .filter(exist -> exist)
-                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND, product.getBranch().getId().toString())))
-                .flatMap(exist -> productPersistencePort.createProduct(product));
+                .getBranch(product.getBranch().getId())
+                .flatMap(branch -> productPersistencePort.saveProduct(product));
     }
 
     @Override
     public Mono<Void> deleteProduct(Long idProduct) {
         return productPersistencePort.deleteProduct(idProduct);
+    }
+
+    @Override
+    public Mono<Product> updateStock(Long idProduct, Integer stock) {
+        return getProduct(idProduct)
+                .map(product -> {
+                    product.setStock(stock);
+                    return product;
+                })
+                .flatMap(productPersistencePort::saveProduct);
+    }
+
+    @Override
+    public Mono<Product> getProduct(Long idProduct) {
+        return productPersistencePort
+                .getProduct(idProduct)
+                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND, idProduct.toString())));
     }
 }
