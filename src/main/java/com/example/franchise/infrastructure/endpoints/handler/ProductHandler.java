@@ -2,6 +2,7 @@ package com.example.franchise.infrastructure.endpoints.handler;
 
 import com.example.franchise.domain.api.IProductServicePort;
 import com.example.franchise.infrastructure.endpoints.dto.ProductDto;
+import com.example.franchise.infrastructure.endpoints.dto.UpdateNameDto;
 import com.example.franchise.infrastructure.endpoints.dto.UpdateStockDto;
 import com.example.franchise.infrastructure.endpoints.mappers.IProductDtoMapper;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +62,19 @@ public class ProductHandler extends BaseHandler {
                         .ok()
                         .bodyValue(productWithBranchDtos)
                 )
+                .transform(errorHandler());
+    }
+
+    public Mono<ServerResponse> updateName(ServerRequest request) {
+        Long idProduct = Long.valueOf(request.pathVariable("id"));
+        return request
+                .bodyToMono(UpdateNameDto.class)
+                .flatMap(updateNameDto -> productServicePort
+                        .updateName(idProduct, updateNameDto.getName()))
+                .map(productDtoMapper::toDto)
+                .flatMap(productDto -> ServerResponse
+                        .ok()
+                        .bodyValue(productDto))
                 .transform(errorHandler());
     }
 }

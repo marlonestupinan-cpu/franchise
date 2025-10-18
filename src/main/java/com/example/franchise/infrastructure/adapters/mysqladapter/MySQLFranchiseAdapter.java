@@ -15,7 +15,7 @@ public class MySQLFranchiseAdapter implements IFranchisePersistencePort {
     private final IFranchiseEntityMapper entityMapper;
 
     @Override
-    public Mono<Franchise> createFranchise(Franchise franchise) {
+    public Mono<Franchise> saveFranchise(Franchise franchise) {
         return franchiseRepository
                 .save(entityMapper.toEntity(franchise))
                 .map(entityMapper::toFranchise);

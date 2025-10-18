@@ -19,7 +19,7 @@ public class BranchUseCase implements IBranchServicePort {
 
         return franchiseServicePort
                 .getFranchise(branch.getFranchise().getId())
-                .flatMap(franchise -> branchPersistencePort.createBranch(branch));
+                .flatMap(franchise -> branchPersistencePort.saveBranch(branch));
     }
 
     @Override
@@ -27,5 +27,15 @@ public class BranchUseCase implements IBranchServicePort {
         return branchPersistencePort
                 .getBranch(idBranch)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.BRANCH_NOT_FOUND, idBranch.toString())));
+    }
+
+    @Override
+    public Mono<Branch> updateName(Long idBranch, String name) {
+        return getBranch(idBranch)
+                .map(branch -> {
+                    branch.setName(name);
+                    return branch;
+                })
+                .flatMap(branchPersistencePort::saveBranch);
     }
 }

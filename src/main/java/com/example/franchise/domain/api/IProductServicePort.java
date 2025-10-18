@@ -14,4 +14,6 @@ public interface IProductServicePort {
     Mono<Product> getProduct(Long idProduct);
 
     Flux<Product> getBestByFranchise(Long idFranchise);
+
+    Mono<Product> updateName(Long idProduct, String name);
 }

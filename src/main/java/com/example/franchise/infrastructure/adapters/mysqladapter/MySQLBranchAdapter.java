@@ -15,7 +15,7 @@ public class MySQLBranchAdapter implements IBranchPersistencePort {
     private final IBranchEntityMapper entityMapper;
 
     @Override
-    public Mono<Branch> createBranch(Branch branch) {
+    public Mono<Branch> saveBranch(Branch branch) {
         return branchPersistencePort
                 .save(entityMapper.toEntity(branch))
                 .map(entityMapper::toBranch);

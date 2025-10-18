@@ -7,4 +7,6 @@ public interface IFranchiseServicePort {
     Mono<Franchise> addFranchise(Franchise franchise);
 
     Mono<Franchise> getFranchise(Long idFranchise);
+
+    Mono<Franchise> updateName(Long idFranchise, String name);
 }
