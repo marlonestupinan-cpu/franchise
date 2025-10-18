@@ -18,14 +18,14 @@ public class BranchUseCase implements IBranchServicePort {
     public Mono<Branch> addBranch(Branch branch) {
 
         return franchiseServicePort
-                .existFranchise(branch.getFranchise().getId())
-                .filter(exist -> exist)
-                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.FRANCHISE_NOT_FOUND, branch.getFranchise().getId().toString())))
-                .flatMap(exist -> branchPersistencePort.createBranch(branch));
+                .getFranchise(branch.getFranchise().getId())
+                .flatMap(franchise -> branchPersistencePort.createBranch(branch));
     }
 
     @Override
-    public Mono<Boolean> existBranch(Long idBranch) {
-        return branchPersistencePort.existBranch(idBranch);
+    public Mono<Branch> getBranch(Long idBranch) {
+        return branchPersistencePort
+                .getBranch(idBranch)
+                .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.BRANCH_NOT_FOUND, idBranch.toString())));
     }
 }

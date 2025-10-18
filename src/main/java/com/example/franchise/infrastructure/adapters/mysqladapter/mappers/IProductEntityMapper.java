@@ -12,11 +12,16 @@ import org.mapstruct.ReportingPolicy;
         unmappedSourcePolicy = ReportingPolicy.IGNORE
 )
 public interface IProductEntityMapper {
+    @Mapping(source = "idBranch", target = "branch")
     Product toProduct(ProductEntity productEntity);
     @Mapping(source = "branch", target = "idBranch")
     ProductEntity toEntity(Product product);
 
     default Long getIdBranch(Branch branch) {
         return branch.getId();
+    }
+
+    default Branch getBranchFromId(Long idBranch) {
+        return Branch.builder().id(idBranch).build();
     }
 }

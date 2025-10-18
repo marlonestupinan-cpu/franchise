@@ -22,7 +22,9 @@ public class MySQLFranchiseAdapter implements IFranchisePersistencePort {
     }
 
     @Override
-    public Mono<Boolean> existFranchise(Long idFranchise) {
-        return franchiseRepository.existsById(idFranchise);
+    public Mono<Franchise> getFranchise(Long idFranchise) {
+        return franchiseRepository
+                .findById(idFranchise)
+                .map(entityMapper::toFranchise);
     }
 }

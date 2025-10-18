@@ -2,6 +2,7 @@ package com.example.franchise.infrastructure.endpoints.handler;
 
 import com.example.franchise.domain.api.IProductServicePort;
 import com.example.franchise.infrastructure.endpoints.dto.ProductDto;
+import com.example.franchise.infrastructure.endpoints.dto.UpdateStockDto;
 import com.example.franchise.infrastructure.endpoints.mappers.IProductDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,19 @@ public class ProductHandler extends BaseHandler {
         return productServicePort
                 .deleteProduct(idProduct)
                 .flatMap(deleted -> ServerResponse.ok().build())
+                .transform(errorHandler());
+    }
+
+    public Mono<ServerResponse> updateStock(ServerRequest request) {
+        Long idProduct = Long.valueOf(request.pathVariable("id"));
+        return request
+                .bodyToMono(UpdateStockDto.class)
+                .flatMap(updateStockDto -> productServicePort
+                        .updateStock(idProduct, updateStockDto.getStock()))
+                .map(iProductDtoMapper::toDto)
+                .flatMap(productDto -> ServerResponse
+                        .ok()
+                        .bodyValue(productDto))
                 .transform(errorHandler());
     }
 }

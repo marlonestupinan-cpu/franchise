@@ -22,7 +22,9 @@ public class MySQLBranchAdapter implements IBranchPersistencePort {
     }
 
     @Override
-    public Mono<Boolean> existBranch(Long idBranch) {
-        return branchPersistencePort.existsById(idBranch);
+    public Mono<Branch> getBranch(Long idBranch) {
+        return branchPersistencePort
+                .findById(idBranch)
+                .map(entityMapper::toBranch);
     }
 }
