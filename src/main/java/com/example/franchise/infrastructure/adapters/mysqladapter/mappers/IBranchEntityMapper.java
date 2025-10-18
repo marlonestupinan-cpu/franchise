@@ -12,6 +12,7 @@ import org.mapstruct.ReportingPolicy;
         unmappedSourcePolicy = ReportingPolicy.IGNORE
 )
 public interface IBranchEntityMapper {
+    @Mapping(source = "idFranchise", target = "franchise")
     Branch toBranch(BranchEntity branchEntity);
     @Mapping(source = "franchise", target = "idFranchise")
     BranchEntity toEntity(Branch branch);
@@ -19,4 +20,8 @@ public interface IBranchEntityMapper {
     default Long getIdFranchise(Franchise franchise) {
         return franchise.getId();
     }
+    default Franchise franchiseFromId(Long id) {
+        return Franchise.builder().id(id).build();
+    }
+
 }

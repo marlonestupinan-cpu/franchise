@@ -7,6 +7,7 @@ import com.example.franchise.domain.exceptions.BusinessException;
 import com.example.franchise.domain.model.Product;
 import com.example.franchise.domain.spi.IProductPersistencePort;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
@@ -41,5 +42,18 @@ public class ProductUseCase implements IProductServicePort {
         return productPersistencePort
                 .getProduct(idProduct)
                 .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.PRODUCT_NOT_FOUND, idProduct.toString())));
+    }
+
+    @Override
+    public Flux<Product> getBestByFranchise(Long idFranchise) {
+        return productPersistencePort
+                .getBestProductFromFranchise(idFranchise)
+                .flatMap(product -> branchServicePort
+                        .getBranch(product.getBranch().getId())
+                        .map(branch -> {
+                            product.setBranch(branch);
+                            return product;
+                        })
+                        .then(Mono.just(product)));
     }
 }
