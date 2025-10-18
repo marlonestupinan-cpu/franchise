@@ -15,9 +15,13 @@ public interface IBranchDtoMapper {
     @Mapping(source = "idFranchise", target = "franchise")
     Branch toBranch(BranchDto branchDto);
 
+    @Mapping(source = "franchise", target = "idFranchise")
     BranchDto toDto(Branch branch);
 
     default Franchise franchiseFromId(Long id) {
         return Franchise.builder().id(id).build();
+    }
+    default Long longFromFranchise(Franchise franchise) {
+        return franchise.getId();
     }
 }

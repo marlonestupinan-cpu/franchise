@@ -16,12 +16,12 @@ import static com.example.franchise.domain.enums.TechnicalMessage.PRODUCT_ADDED;
 @RequiredArgsConstructor
 public class ProductHandler extends BaseHandler {
     private final IProductServicePort productServicePort;
-    private final IProductDtoMapper iProductDtoMapper;
+    private final IProductDtoMapper productDtoMapper;
 
     public Mono<ServerResponse> addProduct(ServerRequest request) {
         return request
                 .bodyToMono(ProductDto.class)
-                .map(iProductDtoMapper::toProduct)
+                .map(productDtoMapper::toProduct)
                 .flatMap(productServicePort::addProduct)
                 .flatMap(product -> ServerResponse
                         .ok().bodyValue(PRODUCT_ADDED.getMessage()))
@@ -43,10 +43,24 @@ public class ProductHandler extends BaseHandler {
                 .bodyToMono(UpdateStockDto.class)
                 .flatMap(updateStockDto -> productServicePort
                         .updateStock(idProduct, updateStockDto.getStock()))
-                .map(iProductDtoMapper::toDto)
+                .map(productDtoMapper::toDto)
                 .flatMap(productDto -> ServerResponse
                         .ok()
                         .bodyValue(productDto))
+                .transform(errorHandler());
+    }
+
+    public Mono<ServerResponse> getBestProductsByFranchise(ServerRequest request) {
+        Long idFranchise = Long.valueOf(request.pathVariable("id"));
+
+        return productServicePort
+                .getBestByFranchise(idFranchise)
+                .map(productDtoMapper::toDtoWithBranch)
+                .collectList()
+                .flatMap(productWithBranchDtos -> ServerResponse
+                        .ok()
+                        .bodyValue(productWithBranchDtos)
+                )
                 .transform(errorHandler());
     }
 }

@@ -6,6 +6,7 @@ import com.example.franchise.infrastructure.adapters.mysqladapter.mappers.IProdu
 import com.example.franchise.infrastructure.adapters.mysqladapter.repository.IProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -30,6 +31,13 @@ public class MySQLProductAdapter implements IProductPersistencePort {
     public Mono<Product> getProduct(Long idProduct) {
         return productRepository
                 .findById(idProduct)
+                .map(entityMapper::toProduct);
+    }
+
+    @Override
+    public Flux<Product> getBestProductFromFranchise(Long idFranchise) {
+        return productRepository
+                .getBestProductsFromFranchise(idFranchise)
                 .map(entityMapper::toProduct);
     }
 }
