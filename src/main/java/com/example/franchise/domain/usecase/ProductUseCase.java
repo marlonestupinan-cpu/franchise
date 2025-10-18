@@ -56,4 +56,14 @@ public class ProductUseCase implements IProductServicePort {
                         })
                         .then(Mono.just(product)));
     }
+
+    @Override
+    public Mono<Product> updateName(Long idProduct, String name) {
+        return getProduct(idProduct)
+                .map(franchise -> {
+                    franchise.setName(name);
+                    return franchise;
+                })
+                .flatMap(productPersistencePort::saveProduct);
+    }
 }

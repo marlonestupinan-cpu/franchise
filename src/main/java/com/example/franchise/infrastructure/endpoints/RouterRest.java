@@ -27,6 +27,9 @@ public class RouterRest {
                 .andRoute(POST("/product"), productHandler::addProduct)
                 .andRoute(DELETE("/product/{id}"), productHandler::deleteProduct)
                 .andRoute(PATCH("/product/{id}/stock"), productHandler::updateStock)
-                .andRoute(GET("/franchise/{id}/leaderboard"), productHandler::getBestProductsByFranchise);
+                .andRoute(GET("/franchise/{id}/leaderboard"), productHandler::getBestProductsByFranchise)
+                .andRoute(PATCH("/franchise/{id}/name"), franchiseHandler::updateName)
+                .andRoute(PATCH("/branch/{id}/name"), branchHandler::updateName)
+                .andRoute(PATCH("/product/{id}/name"), productHandler::updateName);
     }
 }
