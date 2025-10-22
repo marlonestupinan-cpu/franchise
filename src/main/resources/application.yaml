@@ -1,14 +1,9 @@
 server:
   port: 8080
 spring:
-  r2dbc:
-    url: r2dbc:mysql://localhost:3306/franchise
-    username: root
-    password: root
-    pool:
-      enabled: true
-      validation-query: "SELECT 1"
-      max-idle-time: 30m
+  sql:
+    init:
+      mode: always
 
 management:
   endpoints:
